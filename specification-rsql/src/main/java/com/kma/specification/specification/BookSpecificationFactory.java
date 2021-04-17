@@ -23,6 +23,13 @@ public class BookSpecificationFactory {
         return (root, query, cb) -> cb.equal(root.join("authors").get("id"), authorId);
     }
 
+    public static Specification<BookEntity> sortByCategoryId() {
+        return (root, query, cb) -> {
+            query.orderBy(cb.asc(root.join("category").get("id")));
+            return cb.conjunction();
+        };
+    }
+
     public static Specification<BookEntity> fetchAll() {
         return (root, query, cb) -> {
             if (!query.getResultType().equals(Long.class)) {

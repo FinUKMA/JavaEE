@@ -4,8 +4,10 @@ import static com.kma.specification.specification.BookSpecificationFactory.activ
 import static com.kma.specification.specification.BookSpecificationFactory.authorBooks;
 import static com.kma.specification.specification.BookSpecificationFactory.fetchAll;
 import static com.kma.specification.specification.BookSpecificationFactory.newestOnly;
+import static com.kma.specification.specification.BookSpecificationFactory.sortByCategoryId;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Page;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 import com.kma.specification.domain.dto.AuthorDto;
 import com.kma.specification.domain.dto.BookDto;
 import com.kma.specification.domain.dto.CategoryDto;
+import com.kma.specification.domain.entities.AuthorEntity;
 import com.kma.specification.domain.entities.BookEntity;
 import com.kma.specification.repositories.BookRepository;
 
@@ -37,15 +41,20 @@ public class BookService {
 
     private final EntityManager entityManager;
 
-    public List<BookEntity> searchBooksCriteriaApi() {
+    public List<BookEntity> searchBooksCriteriaApi(Integer authorId, LocalDateTime timestamp) {
         final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         final CriteriaQuery<BookEntity> query = cb.createQuery(BookEntity.class);
         final Root<BookEntity> root = query.from(BookEntity.class);
 
-        query.where(
-            cb.equal(root.join("authors").get("id"), 2),
-            cb.greaterThanOrEqualTo(root.get("createdTimestamp"), dateProvider.getCurrentDateTime().minusDays(7))
-        );
+        List<Predicate> predicates = new ArrayList<>();
+        if (authorId != null) {
+            predicates.add(cb.equal(root.join("authors").get("id"), 2));
+        }
+        if (timestamp != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("createdTimestamp"), timestamp));
+        }
+
+        query.where(predicates.toArray(Predicate[]::new));
         query.distinct(true);
         root.fetch("authors", JoinType.LEFT);
         root.fetch("category");
@@ -64,6 +73,8 @@ public class BookService {
         final Page<BookEntity> bookPage = repository.findAll(
             fetchAll()
                 .and(activeOnly())
+                .and(authorBooks(2))
+                .and(sortByCategoryId())
                 .and(newestOnly(createdAfter)),
             PageRequest.of(0, 10)
         );
@@ -76,7 +87,7 @@ public class BookService {
     public List<BookDto> getAuthorBooks(final int authorId) {
         final Page<BookEntity> bookPage = repository.findAll(
             fetchAll()
-                .and(authorBooks(authorId))
+                .and(authorBooks(authorId).or(newestOnly(LocalDateTime.now())))
                 .and(activeOnly()),
             PageRequest.of(0, 10)
         );

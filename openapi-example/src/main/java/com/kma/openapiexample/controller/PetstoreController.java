@@ -25,7 +25,7 @@ public class PetstoreController implements PetsApi {
 
     @Override
     public ResponseEntity<List<PetDto>> listPets(@Valid final Integer limit) {
-        return ResponseEntity.ok(List.of(new PetDto()));
+        return ResponseEntity.ok(List.of(new PetDto().id(1L).name("Boby")));
     }
 
     @Override

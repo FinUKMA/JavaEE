@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ class BookServiceTest {
         final LocalDateTime currentDateTime = LocalDateTime.of(2020, 4, 1, 0, 0, 0);
         when(dateProvider.getCurrentDateTime()).thenReturn(currentDateTime);
 
-        assertThat(bookService.searchBooksCriteriaApi())
+        assertThat(bookService.searchBooksCriteriaApi(null, null))
             .allMatch(book -> book.getCreatedTimestamp().isAfter(currentDateTime))
             .extracting(BookEntity::getId)
             .containsExactly(2, 3, 4, 5);
