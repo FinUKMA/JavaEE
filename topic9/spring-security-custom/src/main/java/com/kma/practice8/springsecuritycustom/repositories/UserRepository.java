@@ -11,7 +11,8 @@ import com.kma.practice8.springsecuritycustom.domain.entities.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query("SELECT user FROM UserEntity user "
-        + "LEFT JOIN FETCH user.permissions "
+        + "LEFT JOIN FETCH user.role role "
+        + "LEFT JOIN FETCH role.permissions "
         + "WHERE user.login = :login")
     Optional<UserEntity> findByLogin(@Param("login") String login);
 

@@ -29,16 +29,8 @@ public class MyUserDetailsService implements UserDetailsService {
         return new AuthenticatedUser(
             username,
             user.getPassword(),
-            mapAuthorities(user.getPermissions()),
+            user.getRole().getPermissions().stream().map(PermissionEntity::getPermission).collect(Collectors.toList()),
             user.getCompany()
         );
-    }
-
-    private static List<GrantedAuthority> mapAuthorities(final List<PermissionEntity> permissions) {
-        return permissions.stream()
-            .map(PermissionEntity::getPermission)
-            .map(Enum::name)
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toUnmodifiableList());
     }
 }

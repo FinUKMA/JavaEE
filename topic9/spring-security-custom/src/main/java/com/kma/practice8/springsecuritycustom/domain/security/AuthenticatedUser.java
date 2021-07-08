@@ -2,8 +2,9 @@ package com.kma.practice8.springsecuritycustom.domain.security;
 
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+
+import com.kma.practice8.springsecuritycustom.domain.type.Permission;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +18,7 @@ public class AuthenticatedUser extends User {
     public AuthenticatedUser(
         final String username,
         final String password,
-        final List<? extends GrantedAuthority> authorities,
+        final List<Permission> authorities,
         final String companyAlias
     ) {
         super(username, password, authorities);

@@ -1,8 +1,14 @@
 package com.kma.practice8.springsecuritycustom.domain.type;
 
-public enum Permission {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Permission implements GrantedAuthority {
 
     VIEW_ADMIN,
-    VIEW_CATALOG
+    VIEW_CATALOG;
 
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

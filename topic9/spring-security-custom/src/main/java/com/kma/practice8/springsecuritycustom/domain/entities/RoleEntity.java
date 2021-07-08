@@ -8,7 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -17,29 +18,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "role")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
+public class RoleEntity {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "login", unique = true)
-    private String login;
+    @Column(name = "name", unique = true)
+    private String name;
 
-    @Column(name = "password")
-    private String password;
-
-    @Column(name = "company")
-    private String company;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
+    @ManyToMany
+    @JoinTable(
+        name = "role_to_permissions",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private List<PermissionEntity> permissions;
 
 }
