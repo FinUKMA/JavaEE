@@ -40,7 +40,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
-        System.out.println("user " + username + " send request to endpoint " + httpServletRequest.getMethod() + " " + getRequestPath(httpServletRequest));
+        System.out.println("user [" + username + "] send request to endpoint " + httpServletRequest.getMethod() + " " + getRequestPath(httpServletRequest));
         filterChain.doFilter(httpServletRequest, httpServletResponse);          // <--- important
     }
 

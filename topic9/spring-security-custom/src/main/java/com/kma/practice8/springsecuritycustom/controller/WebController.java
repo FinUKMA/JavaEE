@@ -15,8 +15,8 @@ public class WebController {
 
     @PreAuthorize("hasAuthority('VIEW_ADMIN')")
     @GetMapping("/admin")
-    public List<String> admin() {
-        return List.of("admin_string");
+    public String admin() {
+        return "admin_string";
     }
 
     @PreAuthorize("hasAuthority('VIEW_CATALOG')")
@@ -33,7 +33,7 @@ public class WebController {
     @PreAuthorize("hasAuthority('VIEW_ADMIN') || authentication.principal.companyAlias == #cAlias")
     @GetMapping("/company/{cAlias}")
     public ResponseEntity<String> companyDetail(@PathVariable("cAlias") final String cAlias) {
-        return ResponseEntity.ok("allow only for user which request same company or admin");
+        return ResponseEntity.ok("asd");
     }
 
 }

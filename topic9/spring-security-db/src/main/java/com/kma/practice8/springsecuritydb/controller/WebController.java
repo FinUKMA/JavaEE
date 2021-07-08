@@ -1,9 +1,11 @@
 package com.kma.practice8.springsecuritydb.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class WebController {
 
     @GetMapping("/")
@@ -12,8 +14,8 @@ public class WebController {
     }
 
     @GetMapping("/admin")
-    public String admin() {
-        return "admin_root";
+    public ResponseEntity<String> admin() {
+        return ResponseEntity.ok("admin_root");
     }
 
     @GetMapping("/admin/subpage")

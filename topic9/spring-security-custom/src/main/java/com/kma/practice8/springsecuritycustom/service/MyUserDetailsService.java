@@ -37,8 +37,6 @@ public class MyUserDetailsService implements UserDetailsService {
     private static List<GrantedAuthority> mapAuthorities(final List<PermissionEntity> permissions) {
         return permissions.stream()
             .map(PermissionEntity::getPermission)
-            .map(Enum::name)
-            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toUnmodifiableList());
     }
 }

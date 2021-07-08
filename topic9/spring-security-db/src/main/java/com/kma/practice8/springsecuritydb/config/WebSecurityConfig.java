@@ -1,7 +1,11 @@
 package com.kma.practice8.springsecuritydb.config;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/catalog").hasAuthority(Permission.VIEW_CATALOG.name())
                 .antMatchers("/profile").authenticated()
                 .anyRequest().permitAll()
+            .and()
+                .exceptionHandling().authenticationEntryPoint((request, response, e) -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                })
             .and()
             .formLogin().permitAll()
             .and()
