@@ -6,7 +6,7 @@ import kma.topic8.springrestsample.dto.LoginDto;
 import kma.topic8.springrestsample.dto.LoginResponseDto;
 
 @Service
-public class ResponseGenerator {
+public class UserService {
 
     public LoginResponseDto doLogin(final LoginDto loginDto) {
         System.out.println("inside service");

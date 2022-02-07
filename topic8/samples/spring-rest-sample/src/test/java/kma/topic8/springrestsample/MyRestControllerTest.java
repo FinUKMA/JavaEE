@@ -24,11 +24,11 @@ import kma.topic8.springrestsample.dto.LoginDto;
 import kma.topic8.springrestsample.dto.LoginResponseDto;
 import lombok.SneakyThrows;
 
-@WebMvcTest(MyRestController.class)
+@WebMvcTest(LoginController.class)
 class MyRestControllerTest {
 
     @MockBean
-    private ResponseGenerator responseGenerator;
+    private UserService userService;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -37,7 +37,7 @@ class MyRestControllerTest {
     @Test
     @SneakyThrows
     void shouldHandleLoginRequest() {
-        when(responseGenerator.doLogin(any())).thenReturn(LoginResponseDto.of("login-value", "success-message"));
+        when(userService.doLogin(any())).thenReturn(LoginResponseDto.of("login-value", "success-message"));
 
         mockMvc.perform(
             post("/login")
@@ -49,7 +49,7 @@ class MyRestControllerTest {
             .andExpect(header().string(HttpHeaders.AUTHORIZATION, "generated-jwt-token"))
             .andExpect(content().json(new String(MyRestControllerTest.class.getResourceAsStream("/response.json").readAllBytes())));
 
-        verify(responseGenerator).doLogin(new LoginDto("username", "secured-password"));
+        verify(userService).doLogin(new LoginDto("username", "secured-password"));
     }
 
 
@@ -58,7 +58,7 @@ class MyRestControllerTest {
     void shouldHandleLoginRequest_withObjectMapper() {
         final LoginDto request = new LoginDto("username", "secured-password");
         final LoginResponseDto response = LoginResponseDto.of("username", "success message");
-        when(responseGenerator.doLogin(any())).thenReturn(response);
+        when(userService.doLogin(any())).thenReturn(response);
 
         mockMvc.perform(
             post("/login")
@@ -70,7 +70,7 @@ class MyRestControllerTest {
             .andExpect(header().string(HttpHeaders.AUTHORIZATION, "generated-jwt-token"))
             .andExpect(content().json(objectMapper.writeValueAsString(response)));
 
-        verify(responseGenerator).doLogin(request);
+        verify(userService).doLogin(request);
     }
 
     @Test
@@ -85,9 +85,9 @@ class MyRestControllerTest {
             .andExpect(header().doesNotExist(HttpHeaders.AUTHORIZATION))
             .andExpect(content().string("Required String parameter 'requiredField' is not present"));
 
-        verifyNoInteractions(responseGenerator);
+        verifyNoInteractions(userService);
         // alternative
-        verify(responseGenerator, never()).doLogin(any());
+        verify(userService, never()).doLogin(any());
     }
 
 }

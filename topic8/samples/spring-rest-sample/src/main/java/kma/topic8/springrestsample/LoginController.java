@@ -15,9 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class MyRestController {
+public class LoginController {
 
-    private final ResponseGenerator responseGenerator;
+    private final UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<LoginResponseDto> login(
@@ -27,10 +27,12 @@ public class MyRestController {
         System.out.println("Accept login request: " + loginDto);
         System.out.println("Required field: " + requiredField);
 
+        final LoginResponseDto responseDto = userService.doLogin(loginDto);
+
         return ResponseEntity
             .status(HttpStatus.OK)
             .header(HttpHeaders.AUTHORIZATION, "generated-jwt-token")
-            .body(responseGenerator.doLogin(loginDto));
+            .body(responseDto);
     }
 
 }
