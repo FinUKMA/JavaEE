@@ -10,6 +10,6 @@ import lombok.ToString;
 public class LoginResponseDto {
 
     private final String login;
-    private final String message;
+    private final String successMessage;
 
 }
