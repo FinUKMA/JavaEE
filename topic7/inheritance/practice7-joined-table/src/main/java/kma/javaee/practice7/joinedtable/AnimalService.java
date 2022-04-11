@@ -25,6 +25,11 @@ public class AnimalService {
         return entityManager.find(animalClazz, id);
     }
 
+    @Transactional
+    public <T extends Animal> void deleteAnimalById(int id, Class<T> animalClazz) {
+        entityManager.remove(entityManager.find(animalClazz, id));
+    }
+
     public List<? extends Animal> getAllAnimals() {
         return entityManager.createQuery("FROM Animal", Animal.class)
             .getResultList();

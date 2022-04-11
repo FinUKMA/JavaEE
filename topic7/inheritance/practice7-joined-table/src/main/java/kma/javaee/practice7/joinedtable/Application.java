@@ -43,6 +43,8 @@ public class Application {
 		System.out.println("My animals: " + myZooAnimals);
 
 		System.out.println("Get all animals: " + animalService.getAllAnimals());
+
+		animalService.deleteAnimalById(1, GiraffeEntity.class);
 	}
 
 }
