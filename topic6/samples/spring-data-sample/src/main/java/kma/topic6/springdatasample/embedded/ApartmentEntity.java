@@ -33,7 +33,7 @@ public class ApartmentEntity {
     @Column(name = "number")
     private String number;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "apartment")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "apartment")
     private List<BillingEntity> billings;
 
 }
