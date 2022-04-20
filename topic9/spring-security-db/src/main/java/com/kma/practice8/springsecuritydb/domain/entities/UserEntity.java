@@ -36,6 +36,9 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "company_id")
+    private Integer companyId;
+
     @ManyToMany
     @JoinTable(
         name = "user_to_permissions",
